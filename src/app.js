@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const todoRoutes = require("./routes/todo.routes");
+const logger = require("./logger");
 
 const app = express();
 app.use(express.json());
@@ -8,8 +9,8 @@ app.use(express.json());
 const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/todos";
 
 mongoose.connect(MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.error(err));
+  .then(() => logger.info("MongoDB connected"))
+  .catch(err => logger.error(err));
 
 app.use("/todos", todoRoutes);
 
@@ -19,5 +20,5 @@ app.get("/health", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  logger.info(`Server running on port ${PORT}`);
 });

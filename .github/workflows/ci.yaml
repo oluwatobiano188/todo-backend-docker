@@ -31,6 +31,8 @@ jobs:
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             VERSION_TAG=${GITHUB_REF#refs/tags/}
             echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_OUTPUT
+          else
+            echo "VERSION_TAG=" >> $GITHUB_OUTPUT
           fi
 
       - name: Build and Push Docker Image
@@ -41,4 +43,4 @@ jobs:
           tags: |
             oluwatobiano/todo-backend:latest
             oluwatobiano/todo-backend:${{ steps.meta.outputs.SHA_TAG }}
-            oluwatobiano/todo-backend:${{ steps.meta.outputs.VERSION_TAG }}
+            ${{ steps.meta.outputs.VERSION_TAG != '' && format('oluwatobiano/todo-backend:{0}', steps.meta.outputs.VERSION_TAG) || '' }}

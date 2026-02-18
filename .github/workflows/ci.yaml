@@ -1,3 +1,4 @@
+
 name: CI Pipeline
 
 on:
@@ -41,6 +42,7 @@ jobs:
           context: .
           push: true
           tags: |
-            oluwatobiano/todo-backend:latest
             oluwatobiano/todo-backend:${{ steps.meta.outputs.SHA_TAG }}
+            ${{ github.ref == 'refs/heads/main' && 'oluwatobiano/todo-backend:prod' || '' }}
+            ${{ github.ref == 'refs/heads/staging' && 'oluwatobiano/todo-backend:staging' || '' }}
             ${{ steps.meta.outputs.VERSION_TAG != '' && format('oluwatobiano/todo-backend:{0}', steps.meta.outputs.VERSION_TAG) || '' }}
